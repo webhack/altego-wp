@@ -1,0 +1,101 @@
+:root {
+    --font-size: 14px;
+    --background: #f9fafb;
+    --foreground: #0f172a;
+    --card: #ffffff;
+    --card-foreground: #0f172a;
+    --primary: #030213;
+    --primary-foreground: #ffffff;
+    --secondary: #f1f5f9;
+    --secondary-foreground: #030213;
+    --muted: #ececf0;
+    --muted-foreground: #717182;
+    --border: rgba(0, 0, 0, 0.1);
+    --input-background: #f3f3f5;
+    --radius: 10px;
+    --success: #22c55e;
+    --success-background: #dcfce7;
+    --success-border: #bbf7d0;
+}
+
+/* base */
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;font-size:var(--font-size);background-color:var(--background);color:var(--foreground);line-height:1.5}
+.container{max-width:64rem;margin:0 auto;padding:2rem 1rem}
+
+.header{text-align:center;margin-bottom:2rem}
+.header h1{font-size:2rem;font-weight:500;margin-bottom:.5rem}
+.subtitle{color:var(--muted-foreground);font-size:1rem}
+
+.booking-card{background:var(--card);border-radius:var(--radius);box-shadow:0 1px 3px rgba(0,0,0,.1);max-width:42rem;margin:0 auto;overflow:hidden}
+.card-header{padding:1.5rem;border-bottom:1px solid var(--border)}
+.card-title{display:flex;align-items:center;gap:.5rem;font-size:1.25rem;font-weight:600;margin-bottom:.5rem}
+.card-description{color:var(--muted-foreground);font-size:.875rem}
+.card-content{padding:1.5rem;display:flex;flex-direction:column;gap:1.5rem}
+
+.form-group{display:flex;flex-direction:column;gap:.5rem}
+.form-section{display:flex;flex-direction:column;gap:1rem}
+.form-row{display:grid;grid-template-columns:1fr;gap:1rem}
+@media (min-width:768px){.form-row{grid-template-columns:1fr 1fr}}
+
+.label{display:flex;align-items:center;gap:.5rem;font-weight:500;font-size:.875rem;color:var(--foreground)}
+.icon{width:20px;height:20px}
+.icon-small{width:16px;height:16px}
+
+.input{padding:.5rem .75rem;border:1px solid var(--border);border-radius:calc(var(--radius) - 2px);background-color:var(--input-background);font-size:.875rem;transition:all .2s;outline:none}
+.input:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(3,2,19,.1)}
+
+.select-container{position:relative}
+.select{width:100%;padding:.5rem 2rem .5rem .75rem;border:1px solid var(--border);border-radius:calc(var(--radius) - 2px);background-color:var(--input-background);font-size:.875rem;appearance:none;cursor:pointer;outline:none;transition:all .2s}
+.select:focus{border-color:var(--primary);box-shadow:0 0 0 3px rgba(3,2,19,.1)}
+.select-arrow{position:absolute;right:.75rem;top:50%;transform:translateY(-50%);pointer-events:none;color:var(--muted-foreground)}
+
+.time-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.5rem}
+@media (max-width:640px){.time-grid{grid-template-columns:repeat(3,1fr)}}
+.time-slot{padding:.5rem;border:1px solid var(--border);border-radius:calc(var(--radius) - 2px);background-color:var(--card);cursor:pointer;text-align:center;font-size:.875rem;transition:all .2s;height:2.5rem;display:flex;align-items:center;justify-content:center}
+.time-slot:hover{background-color:var(--secondary)}
+.time-slot.selected{background-color:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}
+.time-slot.disabled{opacity:.5;pointer-events:none}
+
+.phone-input-group{display:flex;gap:.5rem}
+.phone-input{flex:1}
+.verification-group{display:flex;gap:.5rem}
+.verification-input{flex:1}
+.verification-success{display:flex;align-items:center;gap:.5rem;color:var(--success);font-size:.875rem}
+.success-icon{color:var(--success)}
+
+.btn{padding:.5rem 1rem;border-radius:calc(var(--radius) - 2px);font-size:.875rem;font-weight:500;cursor:pointer;transition:all .2s;outline:none;border:none;display:inline-flex;align-items:center;justify-content:center;gap:.5rem;text-decoration:none}
+.btn-primary{background-color:var(--primary);color:var(--primary-foreground)}
+.btn-primary:hover:not(:disabled){background-color:rgba(3,2,19,.9)}
+.btn-primary:disabled{opacity:.5;cursor:not-allowed}
+.btn-outline{background-color:transparent;border:1px solid var(--border);color:var(--foreground)}
+.btn-outline:hover{background-color:var(--secondary)}
+.btn-full{width:100%;padding:.75rem 1rem}
+
+.appointment-success{padding:1rem;background-color:var(--success-background);border:1px solid var(--success-border);border-radius:var(--radius);display:flex;flex-direction:column;gap:1rem}
+.success-message{display:flex;align-items:center;gap:.5rem;color:var(--success);font-weight:500}
+.manage-link{display:flex;align-items:center;gap:.5rem}
+.link{color:#3b82f6;text-decoration:none;font-weight:500;font-size:.875rem}
+.link:hover{text-decoration:underline}
+
+/* helpers */
+.altego-error{color:#dc2626;font-size:.85rem}
+.altego-hidden{display:none}
+
+/* Datepicker */
+.datepicker{position:relative}
+.dp-popover{position:absolute;top:calc(100% + 6px);left:0;z-index:1000;width:280px;background:#fff;border:1px solid var(--border);border-radius:var(--radius);box-shadow:0 10px 25px rgba(2,6,23,.08);padding:.5rem}
+.dp-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:.25rem;padding:.25rem .25rem}
+.dp-nav{display:flex;gap:.25rem}
+.dp-btn{border:1px solid var(--border);background:var(--secondary);color:var(--foreground);border-radius:8px;padding:.25rem .5rem;cursor:pointer}
+.dp-btn:disabled{opacity:.5;cursor:default}
+.dp-title{font-weight:600;font-size:.9rem}
+.dp-week{display:grid;grid-template-columns:repeat(7,1fr);gap:.25rem;margin:.25rem 0}
+.dp-week .dow{text-align:center;font-size:.75rem;color:var(--muted-foreground);padding:.25rem 0}
+.dp-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:.25rem}
+.dp-day{height:2rem;display:flex;align-items:center;justify-content:center;border:1px solid var(--border);border-radius:8px;background:#fff;cursor:pointer;font-size:.875rem}
+.dp-day:hover{background:var(--secondary)}
+.dp-day.other{opacity:.45}
+.dp-day.disabled{opacity:.35;pointer-events:none}
+.dp-day.today{outline:2px solid rgba(3,2,19,.15)}
+.dp-day.selected{background:var(--primary);color:var(--primary-foreground);border-color:var(--primary)}

@@ -1,0 +1,78 @@
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;font-size:14px;line-height:1.5;background:linear-gradient(to bottom right,#f8fafc,#e2e8f0);min-height:100vh}
+.container{min-height:100vh}
+
+/* Header */
+.header{background-color:#0f172a;color:#fff;padding:2rem 1.5rem}
+.header-content{max-width:28rem;margin:0 auto}
+.header-subtitle{display:flex;align-items:center;gap:.5rem;margin-bottom:.5rem;color:#cbd5e1}
+.header-title{font-size:1.5rem;font-weight:600}
+
+/* Main */
+.main-content{max-width:28rem;margin:0 auto;padding:0 1.5rem 2rem;margin-top:-1rem}
+
+/* Cards */
+.card{background:#fff;border-radius:.75rem;box-shadow:0 10px 15px -3px rgba(0,0,0,.1),0 4px 6px -2px rgba(0,0,0,.05);margin-bottom:1.5rem;border:none}
+.card.shadow-sm{box-shadow:0 1px 2px 0 rgba(0,0,0,.05)}
+.card-content{padding:1.5rem}
+
+/* Barber */
+.barber-info{display:flex;align-items:flex-start;gap:1rem}
+.barber-avatar{width:4rem;height:4rem;border-radius:50%;object-fit:cover}
+.barber-details{flex:1}
+.barber-name{font-size:1.125rem;font-weight:600;color:#0f172a;margin-bottom:.125rem}
+.barber-title{color:#475569;margin-bottom:.5rem}
+.rating-container{display:flex;align-items:center;gap:.5rem}
+.stars{display:flex}
+.star{width:1rem;height:1rem}
+.star.filled{fill:#f59e0b;color:#f59e0b}
+.star.empty{fill:none;color:#cbd5e1}
+.review-count{font-size:.875rem;color:#475569}
+
+/* Action buttons */
+.action-buttons{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1.5rem}
+.action-button{display:flex;flex-direction:column;align-items:center;gap:.5rem;padding:1rem;background:#fff;border:1px solid;border-radius:.5rem;cursor:pointer;transition:all .2s;text-decoration:none}
+.action-button.cancel{color:#dc2626;border-color:#fecaca}
+.action-button.cancel:hover{background-color:#fef2f2}
+.action-button.reschedule{color:#2563eb;border-color:#dbeafe}
+.action-button.reschedule:hover{background-color:#eff6ff}
+.action-button.calendar{color:#16a34a;border-color:#bbf7d0}
+.action-button.calendar:hover{background-color:#f0fdf4}
+.action-button-text{font-size:.75rem}
+
+/* Service */
+.service-item{display:flex;justify-content:space-between;align-items:center;margin-bottom:1rem}
+.service-name{color:#374151}
+.service-price{font-weight:600}
+.separator{height:1px;background:#e5e7eb;margin:1rem 0}
+.total-row{display:flex;justify-content:space-between;align-items:center}
+.total-label{font-weight:600;color:#0f172a}
+.total-price{font-weight:600;font-size:1.125rem}
+.section-title{font-weight:600;color:#0f172a;margin-bottom:1rem}
+
+/* Business */
+.business-header{display:flex;align-items:center;gap:.75rem;margin-bottom:1rem}
+.business-logo{width:2.5rem;height:2.5rem;background-color:#1e293b;border-radius:.5rem;display:flex;align-items:center;justify-content:center;color:#fff;font-weight:600;font-size:.875rem}
+.business-name{font-weight:600;color:#0f172a}
+.business-location{font-size:.875rem;color:#475569}
+
+/* Map */
+.map-placeholder{background:#e2e8f0;border-radius:.5rem;height:8rem;margin-bottom:1rem;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden}
+.map-gradient{position:absolute;inset:0;background:linear-gradient(to bottom right,#bbf7d0,#bfdbfe);opacity:.6}
+.map-content{position:relative;display:flex;align-items:center;gap:.5rem;color:#374151;font-weight:500}
+
+/* Contacts */
+.contact-info{display:flex;flex-direction:column;gap:.75rem}
+.contact-item{display:flex;align-items:center;gap:.75rem;color:#374151}
+.contact-icon{width:1rem;height:1rem;color:#9ca3af}
+.contact-text{font-size:.875rem}
+
+/* Bottom actions */
+.bottom-actions{margin-top:1.5rem;display:grid;grid-template-columns:repeat(2,1fr);gap:.75rem}
+.bottom-action{display:flex;align-items:center;gap:.5rem;justify-content:center;padding:.75rem 1rem;background:#fff;border:1px solid #e5e7eb;border-radius:.5rem;cursor:pointer;transition:all .2s;text-decoration:none;color:inherit}
+.bottom-action:hover{background-color:#f9fafb}
+.icon{width:1.25rem;height:1.25rem}
+.icon-sm{width:1rem;height:1rem}
+
+.bm-map{height:8rem;border-radius:.5rem;overflow:hidden;position:relative}
+.bm-map .leaflet-container{height:100%}
