@@ -1,9 +1,10 @@
 <?php
 /*
 Plugin Name: Altego WP
-Description: Online booking plugin inspired by Altegio. MVP without payments. Includes booking widget, schedule data model, REST API, notifications, client self-service links, admin catalogs and OTP verification.
-Version: 0.2.0
-Author: WHA
+Description: Online booking plugin. Includes booking widget, schedule data model, REST API, notifications, client self-service links, admin catalogs and OTP verification.
+Version: 0.1.0
+Author: Web Help Agency
+Author URI: https://webhelpagency.com
 Requires at least: 6.0
 Requires PHP: 7.4
 */
