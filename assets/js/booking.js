@@ -3,7 +3,7 @@
   const api = (window.AltegoBooking && AltegoBooking.api) || {};
   const cfg = window.AltegoBooking || { recaptcha: { enabled:false }, otp:{enabled:false} };
   const offDays = (cfg.workhours && Array.isArray(cfg.workhours.offDays)) ? cfg.workhours.offDays : [];
-  const weekdayISO = d => ((d.getDay() + 6) % 7) + 1; // 1..7, Пн..Вс
+  const weekdayISO = d => ((d.getDay() + 6) % 7) + 1; // 1..7, Mon..Sun
 
 
   const els = {
@@ -383,11 +383,11 @@
     updateCreateDisabled();
   });
 
-  // открытие календаря
+  // open datepicker
   els.date.addEventListener('click', ()=> dp.open());
   els.date.addEventListener('focus', ()=> dp.open());
 
-  // если кто-то все же печатает вручную
+  // if someone still types manually
   els.date.addEventListener('input', ()=>{
     const iso = toIso(els.date.value.trim());
     state.date_iso = iso;

@@ -17,7 +17,7 @@ class Altego_Repo {
         global $wpdb;
         $weekday = intval(date('N', strtotime($date))); // 1 Mon .. 7 Sun
 
-        // 1. персональные правила
+        // 1. personal rules
         $r = $wpdb->get_row($wpdb->prepare(
             "SELECT start, end, break_start, break_end
      FROM {$wpdb->prefix}altego_staff_schedule
@@ -27,7 +27,7 @@ class Altego_Repo {
 
         if ($r) {
             $out = [];
-            // с учетом перерыва
+            // with break support
             if (!empty($r['break_start']) && !empty($r['break_end'])) {
                 if (strtotime($r['start']) < strtotime($r['break_start'])) {
                     $out[] = ['start' => $r['start'], 'end' => $r['break_start']];
@@ -40,7 +40,7 @@ class Altego_Repo {
             return [['start' => $r['start'], 'end' => $r['end']]];
         }
 
-        // 2. дефолтные правила
+        // 2. default rules
         if (class_exists('Altego_Workhours')) {
             $def = Altego_Workhours::get_defaults();
             $d = $def[(string)$weekday] ?? null;
@@ -66,7 +66,7 @@ class Altego_Repo {
                 ['start' => '14:00', 'end' => '18:00'],
             ];
         }
-// если класс рабочих часов есть и для дня нет правил или он выходной возвращаем пусто
+        // if Workhours class exists and there are no rules for the day or it is a day off, return empty
         return [];
     }
 
@@ -134,7 +134,7 @@ class Altego_Repo {
 
     public function slot_taken($staff_id, $date, $start, $end, $exclude_id = 0) {
         global $wpdb;
-        // пересекается если НЕ (кончается до начала или начинается после конца)
+        // overlap if NOT (ends before start OR starts after end)
         $sql = "SELECT COUNT(*) 
                   FROM {$wpdb->prefix}altego_appointments
                  WHERE staff_id = %d

@@ -6,9 +6,9 @@
                     <svg class="icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                         <rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>
                     </svg>
-                    Service Booking
+                    <?php echo esc_html__('Service Booking', 'altego'); ?>
                 </h2>
-                <p class="card-description">Book your appointment by filling out the form below</p>
+                <p class="card-description"><?php echo esc_html__('Book your appointment by filling out the form below', 'altego'); ?></p>
             </div>
 
             <div class="card-content">
@@ -18,11 +18,11 @@
                         <svg class="icon-small" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/>
                         </svg>
-                        Service
+                        <?php esc_html_e('Service', 'altego'); ?>
                     </label>
                     <div class="select-container">
                         <select id="service-select" class="select">
-                            <option value="">Select a service</option>
+                            <option value=""><?php esc_html_e('Select a service', 'altego'); ?></option>
                         </select>
                         <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <polyline points="6,9 12,15 18,9"/>
@@ -35,7 +35,7 @@
                     <label class="label">Staff</label>
                     <div class="select-container">
                         <select id="staff-select" class="select" disabled>
-                            <option value="">Select staff member</option>
+                            <option value=""><?php esc_html_e('Select staff member', 'altego'); ?></option>
                         </select>
                         <svg class="select-arrow" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <polyline points="6,9 12,15 18,9"/>
@@ -45,7 +45,7 @@
 
                 <!-- Date -->
                 <div class="form-group">
-                    <label class="label">Date</label>
+                    <label class="label"><?php esc_html_e('Date', 'altego'); ?></label>
                     <div class="datepicker">
                         <input type="text" id="date-input" class="input" value="" placeholder="DD.MM.YYYY" readonly>
                         <div class="dp-popover altego-hidden" id="dp-popover"></div>
@@ -59,7 +59,7 @@
                         <svg class="icon-small" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                             <circle cx="12" cy="12" r="10"/><polyline points="12,6 12,12 16,14"/>
                         </svg>
-                        Available Times
+                        <?php esc_html_e('Available Times', 'altego'); ?>
                     </label>
                     <div class="time-grid" id="time-grid"></div>
                 </div>
@@ -68,17 +68,17 @@
                 <div class="form-section">
                     <div class="form-row">
                         <div class="form-group">
-                            <label class="label">Name</label>
-                            <input type="text" id="customer-name" class="input" placeholder="Enter your name">
+                            <label class="label"><?php esc_html_e('Name', 'altego'); ?></label>
+                            <input type="text" id="customer-name" class="input" placeholder="<?php esc_html_e('Enter your name', 'altego'); ?>">
                         </div>
                         <div class="form-group">
                             <label class="label">
                                 <svg class="icon-small" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
                                     <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/>
                                 </svg>
-                                Email
+                                <?php esc_html_e('Email', 'altego'); ?>
                             </label>
-                            <input type="email" id="customer-email" class="input" placeholder="Enter your email">
+                            <input type="email" id="customer-email" class="input" placeholder="<?php esc_html_e('Enter your email', 'altego'); ?>">
                         </div>
                     </div>
 

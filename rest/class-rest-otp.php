@@ -24,12 +24,12 @@ class Altego_REST_OTP extends WP_REST_Controller {
         $e = strtolower(trim((string) $email));
         if ($e) $keys[] = 'e:' . $e;
         if ($p) $keys[] = 'p:' . $p;
-        return $keys; // массив из 0-2 ключей
+        return $keys; // array of 0-2 keys
     }
 
     public function send(WP_REST_Request $r) {
         if (!Altego_Settings::get('otp_enabled')) {
-            // OTP выключен в настройках. Отвечаем 200, чтобы фронт не ругался.
+            // OTP is disabled in settings. Return 200 so the frontend doesn't fail.
             return rest_ensure_response(['ok' => true, 'disabled' => true]);
         }
 
@@ -38,7 +38,7 @@ class Altego_REST_OTP extends WP_REST_Controller {
         $phone = sanitize_text_field($p['phone'] ?? '');
         $recaptcha = sanitize_text_field($p['recaptcha'] ?? '');
 
-        // reCAPTCHA по настройке
+        // reCAPTCHA per settings
         if (!Altego_Guards::verify_recaptcha($recaptcha)) {
             return new WP_Error('captcha', 'reCAPTCHA validation failed', ['status' => 400]);
         }
@@ -54,7 +54,7 @@ class Altego_REST_OTP extends WP_REST_Controller {
             set_transient('altego_otp_' . md5($k), $code, $ttl_min * MINUTE_IN_SECONDS);
         }
 
-        // отправляем код на email
+        // send code via email
         if ($email) {
             if (method_exists('Altego_Mailer', 'send_otp')) {
                 Altego_Mailer::send_otp($email, $code, $ttl_min);
@@ -66,7 +66,7 @@ class Altego_REST_OTP extends WP_REST_Controller {
             }
         }
 
-        // если захотите СМС добавьте интеграцию здесь
+        // if you want SMS, add integration here
 
         return rest_ensure_response(['ok' => true, 'ttl' => $ttl_min * 60]);
     }

@@ -25,9 +25,28 @@ class Altego_Manage_Page {
             if ($saved && hash_equals($saved, $token)) $ok = true;
         }
 
-        // стили и js макета
+        // Handle cancellation (POST) before any output
+        if ($ok && $_SERVER['REQUEST_METHOD'] === 'POST' && !empty($_POST['altego_action']) && $_POST['altego_action'] === 'cancel') {
+            // Verify nonce generated in the form
+            if (isset($_POST['_wpnonce']) && wp_verify_nonce($_POST['_wpnonce'], 'altego_cancel_' . $appointment_id)) {
+                // Update status in DB
+                $table = $wpdb->prefix . 'altego_appointments';
+                $updated = $wpdb->update($table, ['status' => 'canceled'], ['id' => $appointment_id], ['%s'], ['%d']);
+
+                // Redirect back to GET page to prevent resubmission and show fresh data
+                $redirect_url = add_query_arg([
+                    'a' => $appointment_id,
+                    't' => $token,
+                    'c' => $updated !== false ? 1 : 0,
+                ], home_url('booking-manage'));
+                wp_safe_redirect($redirect_url);
+                exit;
+            }
+        }
+
+        // styles and layout JS
         wp_enqueue_style('altego-manage-modern', ALTEGO_WP_URL . 'assets/css/manage.css', [], ALTEGO_WP_VERSION);
-        // подключаем карту
+        // map assets
         wp_enqueue_style('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css', [], '1.9.4');
         wp_enqueue_script('leaflet', 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js', [], '1.9.4', true);
         wp_enqueue_script('altego-manage-modern', ALTEGO_WP_URL . 'assets/js/manage.js', ['leaflet'], ALTEGO_WP_VERSION, true);
@@ -40,7 +59,7 @@ class Altego_Manage_Page {
             return ob_get_clean();
         }
 
-        // все данные
+        // fetch all data
         $row = $wpdb->get_row($wpdb->prepare("
     SELECT a.id, a.date, a.time_start AS start, a.time_end AS end, a.status,
            a.staff_id, a.service_id,
@@ -61,28 +80,32 @@ class Altego_Manage_Page {
             return ob_get_clean();
         }
 
-        // локализуем адрес для карты
+        $status_label = ($row['status'] === 'canceled')
+            ? '<span style="color:#ef4444">Appointment Canceled</span>'
+            : '<span>Upcoming Appointment</span>';
+
+        // localize address for the map
         wp_localize_script('altego-manage-modern', 'AltegoManage', [
             'address' => (string)($row['location_address'] ?: ''),
             'markerTitle' => (string)($row['location_name'] ?: 'Location'),
         ]);
 
         $date_label = date_i18n('F jS', strtotime($row['date']));
-        $time_label = esc_html($row['start']).' - '.esc_html($row['end']);
+        $time_label = date_i18n('H:i', strtotime($row['start'])) . ' – ' . date_i18n('H:i', strtotime($row['end']));
 
-        // хедер
+        // header
         echo '<div class="header"><div class="header-content">
-          <div class="header-subtitle">
-            <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <circle cx="12" cy="12" r="10"></circle><polyline points="12,6 12,12 16,14"></polyline>
-            </svg><span>Upcoming Appointment</span>
-          </div>
-          <h1 class="header-title">'.esc_html($date_label).', '.$time_label.'</h1>
-        </div></div>';
+  <div class="header-subtitle">
+    <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+      <circle cx="12" cy="12" r="10"></circle><polyline points="12,6 12,12 16,14"></polyline>
+    </svg>'.$status_label.'
+  </div>
+  <h1 class="header-title">'.esc_html($date_label).', '.$time_label.'</h1>
+</div></div>';
 
         echo '<div class="main-content">';
 
-        // карточка сотрудника
+        // staff card
         $rating = floatval($row['staff_rating']);
         $filled = max(0, min(5, (int)round($rating)));
         $stars = '';
@@ -102,7 +125,7 @@ class Altego_Manage_Page {
           </div>
         </div></div>';
 
-        // кнопки действий
+        // action buttons
         $ics = esc_url(home_url('/altego-ics/'.$appointment_id));
         $reschedule_base = (string)Altego_Settings::get('reschedule_url');
         $reschedule_link = '';
@@ -120,15 +143,16 @@ class Altego_Manage_Page {
 
         echo '<div class="action-buttons">';
 
-        // Cancel работает через POST и nonce
+        // Cancel via POST and nonce
+        $cancel_disabled = ($row['status'] === 'canceled') ? 'disabled' : '';
         echo '<form method="post" class="action-button cancel" style="border-color:#fecaca" onsubmit="return confirm(\'Cancel this appointment?\')">';
         wp_nonce_field('altego_cancel_'.$appointment_id);
         echo '<input type="hidden" name="altego_action" value="cancel">';
-        echo '<button type="submit" style="all:unset;display:flex;flex-direction:column;align-items:center;gap:.5rem;cursor:pointer">
-          <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-            <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
-          </svg><span class="action-button-text">Cancel</span>
-        </button></form>';
+        echo '<button type="submit" '.$cancel_disabled.' style="all:unset;display:flex;flex-direction:column;align-items:center;gap:.5rem;cursor:pointer">
+  <svg class="icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
+    <line x1="18" y1="6" x2="6" y2="18"></line><line x1="6" y1="6" x2="18" y2="18"></line>
+  </svg><span class="action-button-text">Cancel</span>
+</button></form>';
 
         if ($reschedule_link) {
             echo '<a class="action-button reschedule" href="'.esc_url($reschedule_link).'">
@@ -155,7 +179,7 @@ class Altego_Manage_Page {
 
         echo '</div>'; // action-buttons
 
-        // услуги
+        // services
         $price = floatval($row['service_price']);
         echo '<div class="card shadow-sm"><div class="card-content">
           <h3 class="section-title">Services</h3>
@@ -166,7 +190,7 @@ class Altego_Manage_Page {
             <span class="total-price">'.number_format_i18n($price,0).' ₴</span></div>
         </div></div>';
 
-        // локация и карта
+        // location and map
         $loc_logo = $row['location_logo'] ?: '';
         $logo_html = $loc_logo ? '<img class="business-logo" src="'.esc_url($loc_logo).'" alt="">' : '<div class="business-logo">OD</div>';
 
@@ -179,7 +203,7 @@ class Altego_Manage_Page {
 
           <div id="bm-map" class="map-placeholder bm-map"><div class="map-gradient"></div></div>';
 
-        // контакты
+        // contacts
         echo '<div class="contact-info">';
         if (!empty($row['location_address'])) {
             echo '<div class="contact-item" data-type="addr" data-value="'.esc_attr($row['location_address']).'">
@@ -222,14 +246,14 @@ class Altego_Manage_Page {
         }
         echo '</div>'; // contact-info
 
-        // нижние кнопки
+        // bottom actions
         $tel = !empty($row['phone1']) ? preg_replace('~\\D+~','',$row['phone1']) : (!empty($row['phone2']) ? preg_replace('~\\D+~','',$row['phone2']) : '');
         $gmaps = !empty($row['location_address']) ? 'https://www.google.com/maps/dir/?api=1&destination='.rawurlencode($row['location_address']) : '#';
         echo '<div class="bottom-actions">';
         if ($tel) {
             echo '<a class="bottom-action" href="tel:'.esc_attr($tel).'">
             <svg class="icon-sm" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true">
-              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
+              <path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2  2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"></path>
             </svg>Call
           </a>';
         }
